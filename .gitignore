@@ -1,0 +1,38 @@
+# ============================================================
+# 智美成 ERP 系统 · 加密版 仓库忽略规则
+# 目标仓库：私有仓库（仅源码与脚本入库，运行时二进制与业务数据不入库）
+# ============================================================
+
+# ---------- 运行时二进制与数据（约 952 MB）----------
+# runtime/ 由安装脚本 / 打包工具重新生成：PHP 8.3.35、MySQL 8.0.29、nginx 1.31.5
+# 以及 MySQL 数据目录（含 SSL 私钥）、日志、临时文件。
+runtime/
+
+# ---------- 敏感文件（一律不入库）----------
+# 加壳内容密钥：入库等于加密形同虚设
+bin/guard/shell.dat
+
+# 本机授权状态（目标机自行激活）
+license.json
+
+# RSA 私钥：仅签发激活码使用，绝不可外传
+tools/keys/license_private.pem
+tools/keys/*.pem
+tools/keys/sn_counter.txt
+tools/keys/openssl_min.cnf
+
+# 业务数据备份（含真实经营数据）
+storage/backup/*.sql
+
+# ---------- 运行期状态 ----------
+*.pid
+*.pids
+hwid.cache
+
+# ---------- 编辑器 / 系统 ----------
+.idea/
+.vscode/
+Thumbs.db
+desktop.ini
+.DS_Store
+*.lnk

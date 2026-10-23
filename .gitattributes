@@ -1,0 +1,28 @@
+# ============================================================
+# 智美成 ERP 系统 · 加密版 —— 行尾与文件属性
+# ============================================================
+
+# 加密文件为二进制密文(magic ERPG1),禁止任何行尾/文本转换
+*.enc binary
+*.dat binary
+*.exe binary
+*.zip binary
+*.gz binary
+*.png binary
+*.jpg binary
+*.pdf binary
+*.docx binary
+*.pem text eol=lf
+
+# 源码与脚本统一 LF,跨平台一致
+*.php text eol=lf
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+*.sql text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.txt text eol=crlf
+*.conf text eol=lf
+*.template text eol=lf
