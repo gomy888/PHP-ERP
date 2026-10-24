@@ -316,7 +316,6 @@ E:\PHP_ERP\
 │                            dist\智美成ERP激活码算号工具.exe(EXE 产物)
 │                            算号工具说明.md
 │                    keys\   license_private.pem(私钥,勿外传) license_pubkey.pem
-├── ERP加密版\        ★ 加壳加密版产物(打包生成,不入库)
 │                    bin\guard\(loader/shell.dat/manifest) client\(客户端)
 ├── tests\           smoke.php 端到端冒烟测试、concurrency.php 并发实测、
 │                    export.php 导出测试、import.php 导入+报表导出测试、
@@ -591,56 +590,7 @@ python 'E:\PHP_ERP\docs\build_pdf.py'
 
 ---
 
-## 十四、加密版与局域网客户端
-
-完整说明见 **[`docs\加密版说明.md`](docs/加密版说明.md)**，这里只列要点。
-
-### 14.1 加密版（加壳 + 授权）
-
-```powershell
-# ① 一次性生成厂商密钥对（私钥只用来算号，绝不能外传）
-php tools\pack\makekeys.php --force
-
-# ② 打包（自动做「授权门禁自检」，5 个场景全过才允许出包）
-php tools\pack\pack.php --src=E:\PHP_ERP --dst=E:\PHP_ERP\ERP加密版 --force
-```
-
-产物 `E:\PHP_ERP\ERP加密版`：
-
-- 111 个业务 PHP 全部变成 `*.php.enc`，**磁盘上没有明文源码**，运行时在内存里解密；
-- 每个文件带 HMAC 完整性校验，改一个字节就拒绝加载；
-- **强制授权**：首次启动 30 天试用 → 到期跳激活页；
-- 端口：Web **8090** / MySQL **3309** / FastCGI **9010-9017**（与源码版端口段错开）。
-
-### 14.2 激活码算号工具（厂商侧）
-
-**EXE 版**（推荐，厂商侧无需装 PHP）：
-
-`tools\keygen\dist\智美成ERP激活码算号工具.exe` —— 单文件约 18KB，
-拷到任何一台 Windows 电脑双击即用，自带 RSA 实现，不依赖 PHP / OpenSSL。
-
-```powershell
-智美成ERP激活码算号工具.exe --mid=<客户机器码> --days=365    # 一年期
-智美成ERP激活码算号工具.exe --mid=<客户机器码> --forever    # 永久授权
-智美成ERP激活码算号工具.exe --file=mids.txt --days=365 --out=codes.csv   # 批量
-智美成ERP激活码算号工具.exe --verify=<激活码>                # 验签自检
-```
-
-**PHP 版**（源码版工具，与 EXE 版产出完全等价）：
-
-```powershell
-php tools\keygen\keygen.php --mid=<客户机器码> --days=365
-php tools\keygen\keygen.php --mid=<客户机器码> --forever
-php tools\keygen\keygen.php --file=mids.txt --days=365 --out=codes.csv
-php tools\keygen\keygen.php --verify=<激活码>
-```
-
-客户机器码在激活页 `/activate` 上，形如 `28A43-C6511-2A6D2-61453-1C529`，
-由系统盘序列号算出，**激活码与硬盘绑定**（换盘要重新激活）。
-
-详细说明见 [`tools\keygen\算号工具说明.md`](tools/keygen/算号工具说明.md)。
-
-### 14.3 局域网客户端
+### 14.2 局域网客户端
 
 `client\dist\智美成ERP客户端.exe`（C# WinForms，单文件 26KB，零外部依赖），
 拷到任意一台同网段的电脑双击即可：
@@ -662,7 +612,7 @@ client\dist\智美成ERP客户端.exe --selftest 8090 admin admin123
 
 结果写到 `%TEMP%\zmc_client_selftest.txt`。
 
-### 14.4 编译客户端
+### 14.3 编译客户端
 
 ```powershell
 C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe /nologo /target:winexe /platform:anycpu /optimize+ ^
